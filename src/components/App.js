@@ -39,7 +39,7 @@ const App = () => {
         <div className="App">
           <h1>GenZ</h1>
           <nav>
-            <Link to="/">Posts</Link> | <Link to="/users">Users</Link> | <Link to="/notifications">Notifications</Link>
+            <a href="/">Posts</a> | <a href="/users">Users</a> | <a href="/notifications">Notifications</a>
           </nav>
           <Switch>
             <Route exact path="/" component={PostsPage} />
@@ -97,31 +97,33 @@ const PostsPage = () => {
   return (
     <div>
       <h2>Create Post</h2>
-      <input 
-        id="postTitle" 
-        value={form.title} 
-        onChange={handleChange} 
-        placeholder="Title" 
-      />
-      <select 
-        id="postAuthor" 
-        value={form.author} 
-        onChange={handleSelectChange}
-      >
-        <option value="">Select author</option>
-        {users.map((u) => (
-          <option key={u.id} value={u.name}>
-            {u.name}
-          </option>
-        ))}
-      </select>
-      <textarea 
-        id="postContent" 
-        value={form.content} 
-        onChange={handleChange} 
-        placeholder="Content" 
-      />
-      <button onClick={addPost}>Submit</button>
+      <form>
+        <input 
+          id="postTitle" 
+          value={form.title} 
+          onChange={handleChange} 
+          placeholder="Title" 
+        />
+        <select 
+          id="postAuthor" 
+          value={form.author} 
+          onChange={handleSelectChange}
+        >
+          <option value="">Select author</option>
+          {users.map((u) => (
+            <option key={u.id} value={u.name}>
+              {u.name}
+            </option>
+          ))}
+        </select>
+        <textarea 
+          id="postContent" 
+          value={form.content} 
+          onChange={handleChange} 
+          placeholder="Content" 
+        />
+        <button type="button" onClick={addPost}>Submit</button>
+      </form>
 
       <div className="posts-list">
         {posts.map((post, index) => (
