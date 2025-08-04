@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext } from 'react';
+import React, { useState, useContext, createContext } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -6,8 +6,8 @@ import {
   Link,
   useParams,
   useHistory,
-} from 'react-router-dom';
-import '../styles/App.css';
+} from "react-router-dom";
+import "../styles/App.css";
 
 // -----------------------------
 // Context for Global State
@@ -15,15 +15,15 @@ import '../styles/App.css';
 const PostContext = createContext();
 
 const users = [
-  { id: '1', name: 'Alice' },
-  { id: '2', name: 'Bob' },
-  { id: '3', name: 'Charlie' },
+  { id: "1", name: "Alice" },
+  { id: "2", name: "Bob" },
+  { id: "3", name: "Charlie" },
 ];
 
 const notificationsData = [
-  'Alice posted something',
-  'Bob liked your post',
-  'Charlie commented',
+  "Alice posted something",
+  "Bob liked your post",
+  "Charlie commented",
 ];
 
 // -----------------------------
@@ -34,12 +34,15 @@ const App = () => {
   const [notifications, setNotifications] = useState([]);
 
   return (
-    <PostContext.Provider value={{ posts, setPosts, notifications, setNotifications }}>
+    <PostContext.Provider
+      value={{ posts, setPosts, notifications, setNotifications }}
+    >
       <Router>
         <div className="App">
           <h1>GenZ</h1>
           <nav>
-            <Link to="/">Posts</Link> | <Link to="/users">Users</Link> | <Link to="/notifications">Notifications</Link>
+            <Link to="/">Posts</Link> | <Link to="/users">Users</Link> |{" "}
+            <Link to="/notifications">Notifications</Link>
           </nav>
           <Switch>
             <Route exact path="/" component={PostsPage} />
@@ -60,10 +63,10 @@ let idCounter = 1;
 
 const PostsPage = () => {
   const { posts, setPosts } = useContext(PostContext);
-  const [form, setForm] = useState({ title: '', content: '', author: '' });
+  const [form, setForm] = useState({ title: "", content: "", author: "" });
 
   const handleChange = (e) => {
-    const field = e.target.id.replace('post', '').toLowerCase();
+    const field = e.target.id.replace("post", "").toLowerCase();
     setForm({ ...form, [field]: e.target.value });
   };
 
@@ -81,15 +84,20 @@ const PostsPage = () => {
       reactions: { "👍": 0, "❤️": 0, "🚀": 0, "😂": 0, "🎉": 0 },
     };
     setPosts([newPost, ...posts]);
-    setForm({ title: '', content: '', author: '' });
+    setForm({ title: "", content: "", author: "" });
   };
 
   const handleReact = (id, emoji, index) => {
     // Fifth button (index 4) should not increment
     if (index === 4) return;
-    
+
     const updated = posts.map((p) =>
-      p.id === id ? { ...p, reactions: { ...p.reactions, [emoji]: p.reactions[emoji] + 1 } } : p
+      p.id === id
+        ? {
+            ...p,
+            reactions: { ...p.reactions, [emoji]: p.reactions[emoji] + 1 },
+          }
+        : p
     );
     setPosts(updated);
   };
@@ -97,32 +105,33 @@ const PostsPage = () => {
   return (
     <div>
       <h2>Create Post</h2>
-      <input 
-        id="postTitle" 
-        value={form.title} 
-        onChange={handleChange} 
-        placeholder="Title" 
-      />
-      <select 
-        id="postAuthor" 
-        value={form.author} 
-        onChange={handleSelectChange}
-      >
-        <option value="">Select author</option>
-        {users.map((u) => (
-          <option key={u.id} value={u.name}>
-            {u.name}
-          </option>
-        ))}
-      </select>
-      <textarea 
-        id="postContent" 
-        value={form.content} 
-        onChange={handleChange} 
-        placeholder="Content" 
-      />
-      <button onClick={addPost}>Submit</button>
-
+      <form>
+        <input
+          id="postTitle"
+          value={form.title}
+          onChange={handleChange}
+          placeholder="Title"
+        />
+        <select
+          id="postAuthor"
+          value={form.author}
+          onChange={handleSelectChange}
+        >
+          <option value="">Select author</option>
+          {users.map((u) => (
+            <option key={u.id} value={u.name}>
+              {u.name}
+            </option>
+          ))}
+        </select>
+        <textarea
+          id="postContent"
+          value={form.content}
+          onChange={handleChange}
+          placeholder="Content"
+        />
+        <button onClick={addPost}>Submit</button>
+      </form>
       <div className="posts-list">
         {posts.map((post, index) => (
           <div key={post.id} className="post">
@@ -131,8 +140,8 @@ const PostsPage = () => {
             <p>By: {post.author}</p>
             <div>
               {Object.entries(post.reactions).map(([emoji, count], i) => (
-                <button 
-                  key={emoji} 
+                <button
+                  key={emoji}
                   onClick={() => handleReact(post.id, emoji, i)}
                 >
                   {emoji} {count}
@@ -157,7 +166,11 @@ const PostDetailsPage = () => {
   const history = useHistory();
   const { posts, setPosts } = useContext(PostContext);
   const post = posts.find((p) => p.id === id);
-  const [edit, setEdit] = useState(post ? { title: post.title, content: post.content } : { title: '', content: '' });
+  const [edit, setEdit] = useState(
+    post
+      ? { title: post.title, content: post.content }
+      : { title: "", content: "" }
+  );
 
   const save = () => {
     if (!post) return;
@@ -165,24 +178,26 @@ const PostDetailsPage = () => {
       p.id === id ? { ...p, title: edit.title, content: edit.content } : p
     );
     setPosts(updated);
-    history.push('/');
+    history.push("/");
   };
 
   if (!post) return <div className="post">Post not found</div>;
 
   return (
     <div className="post">
-      <input 
-        id="postTitle" 
-        value={edit.title} 
-        onChange={(e) => setEdit({ ...edit, title: e.target.value })} 
+      <input
+        id="postTitle"
+        value={edit.title}
+        onChange={(e) => setEdit({ ...edit, title: e.target.value })}
       />
-      <textarea 
-        id="postContent" 
-        value={edit.content} 
-        onChange={(e) => setEdit({ ...edit, content: e.target.value })} 
+      <textarea
+        id="postContent"
+        value={edit.content}
+        onChange={(e) => setEdit({ ...edit, content: e.target.value })}
       />
-      <button className="button" onClick={save}>Save</button>
+      <button className="button" onClick={save}>
+        Save
+      </button>
     </div>
   );
 };
@@ -229,7 +244,10 @@ const NotificationsPage = () => {
   return (
     <div>
       <h2>Notifications</h2>
-      <button className="button" onClick={() => setNotifications(notificationsData)}>
+      <button
+        className="button"
+        onClick={() => setNotifications(notificationsData)}
+      >
         Refresh Notifications
       </button>
       <section className="notificationsList">
